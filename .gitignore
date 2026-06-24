@@ -1,0 +1,101 @@
+# ──────────────────────────────────────────────────────────────
+# peace-os .gitignore
+# This file tells git what to NEVER track, even if accidentally added.
+# It is the single most important safety file in a public repo.
+# ──────────────────────────────────────────────────────────────
+
+
+# ===== SECRETS & CREDENTIALS (the "act as me" stuff — NEVER commit) =====
+# API keys, tokens, passwords live in environment variables / platform
+# credential stores, NOT in the repo.
+.env
+.env.*
+*.env
+env/
+secrets/
+secret/
+credentials/
+*credential*.json
+*-credentials.json
+service-account*.json
+*service-account*.json
+gcp-key*.json
+google-credentials*.json
+*.pem
+*.key
+*.p12
+*.pfx
+auth.json
+config.secret.*
+
+
+# ===== CLIENT DATA (must stay in private Google Drive, NEVER in the repo) =====
+# Real client brand kits, scripts, assets, campaigns — none of this is public.
+clients/
+client-data/
+client_data/
+brand-kits/
+brand_kits/
+assets/
+uploads/
+campaigns/
+# Block common client media file types anywhere in the repo
+*.mp3
+*.mp4
+*.mov
+*.wav
+*.m4a
+*.aac
+# (If you ever NEED a sample media file in the repo for a demo,
+#  put it in a folder called  demo-assets/  and see the exception
+#  at the bottom of this file.)
+
+
+# ===== NODE / REMOTION build junk =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+package-lock.json.bak
+dist/
+build/
+out/
+.cache/
+.remotion/
+
+
+# ===== RENDER OUTPUT (generated videos — don't commit, they're huge) =====
+output/
+renders/
+rendered/
+*.rendered.mp4
+
+
+# ===== n8n =====
+# n8n workflow JSON exports are SAFE to commit (credentials are stored
+# separately by n8n, not inside the workflow file) — so they are NOT
+# ignored here. But block any local n8n database/runtime files:
+.n8n/
+n8n-data/
+
+
+# ===== OS / EDITOR noise =====
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*~
+
+
+# ===== EXCEPTION (optional) =====
+# If you deliberately want ONE fake/sample media file in the repo for a
+# demo (e.g. a placeholder voice note for "Billy's Burger"), uncomment
+# the lines below to allow a single demo-assets folder through:
+#
+# !demo-assets/
+# !demo-assets/**
+#
+# Only ever put FAKE / placeholder data in demo-assets — never a real client.
