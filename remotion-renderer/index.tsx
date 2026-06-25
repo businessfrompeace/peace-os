@@ -47,6 +47,13 @@ async function downloadVideo(url: string, outputPath: string): Promise<string> {
   }
 }
 
+// Re-encode a video to uniform format (1920x1080, h264, 30fps)
+function normalizeVideo(inputPath: string, outputPath: string, jobId: string): void {
+  const ffmpegCmd = `ffmpeg -i ${inputPath} -vf "scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2" -c:v libx264 -preset fast -crf 23 -r 30 -c:a aac -b:a 128k ${outputPath}`;
+  console.log(`[${jobId}] Normalizing video: ${ffmpegCmd}`);
+  execSync(ffmpegCmd, { stdio: "pipe" });
+}
+
 app.get("/health", async (c) => {
   return c.json({ status: "ok", storage: "in-memory" });
 });
@@ -166,10 +173,22 @@ app.post("/render", async (c) => {
           });
         }
 
-        console.log(`[${jobId}] Building concat list with ${downloadedClips.length} clips`);
+        console.log(`[${jobId}] Normalizing ${downloadedClips.length} clips to uniform format`);
+
+        // Normalize all clips to uniform format (1920x1080, h264, 30fps, aac audio)
+        const normalizedClips = [];
+        for (let i = 0; i < downloadedClips.length; i++) {
+          const clip = downloadedClips[i];
+          const normalizedPath = path.join(outputPath, `normalized-${jobId}-${i}.mp4`);
+          console.log(`[${jobId}] Normalizing clip ${i}: ${clip.path} -> ${normalizedPath}`);
+          normalizeVideo(clip.path, normalizedPath, jobId);
+          normalizedClips.push(normalizedPath);
+        }
+
+        console.log(`[${jobId}] Building concat list with ${normalizedClips.length} normalized clips`);
         
-        const concatList = downloadedClips
-          .map((clip) => `file '${clip.path}'`)
+        const concatList = normalizedClips
+          .map((clip) => `file '${clip}'`)
           .join("\n");
         const concatFile = path.join(outputPath, `concat-${jobId}.txt`);
         fs.writeFileSync(concatFile, concatList);
