@@ -1,12 +1,10 @@
 FROM oven/bun:latest
 
-# Install ffmpeg and Chrome dependencies
+# Install ffmpeg and minimal Chrome dependencies
 RUN apt-get update && apt-get install -y \
     ffmpeg \
-    chromium-browser \
+    chromium \
     libxss1 \
-    libappindicator1 \
-    libindicator7 \
     fonts-liberation \
     xdg-utils \
     && rm -rf /var/lib/apt/lists/*
