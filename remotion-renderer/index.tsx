@@ -49,7 +49,7 @@ async function downloadVideo(url: string, outputPath: string): Promise<string> {
 
 // Re-encode a video to uniform format (1920x1080, h264, 30fps)
 function normalizeVideo(inputPath: string, outputPath: string, jobId: string): void {
-  const ffmpegCmd = `ffmpeg -i ${inputPath} -vf "scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2" -c:v libx264 -preset fast -crf 23 -r 30 -c:a aac -b:a 128k ${outputPath}`;
+  const ffmpegCmd = `ffmpeg -i ${inputPath} -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2" -c:v libx264 -preset fast -crf 23 -r 30 -c:a aac -b:a 128k ${outputPath}`;
   console.log(`[${jobId}] Normalizing video: ${ffmpegCmd}`);
   execSync(ffmpegCmd, { stdio: "pipe" });
 }
