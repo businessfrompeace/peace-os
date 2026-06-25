@@ -1,0 +1,18 @@
+{
+  "name": "remotion-renderer",
+  "version": "1.0.0",
+  "description": "Lightweight video rendering API using Remotion and Hono",
+  "main": "index.tsx",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run index.tsx",
+    "start": "bun run index.tsx"
+  },
+  "dependencies": {
+    "@remotion/renderer": "^4.0.0",
+    "hono": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}
